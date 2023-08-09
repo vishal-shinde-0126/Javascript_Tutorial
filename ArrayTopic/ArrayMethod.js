@@ -1400,9 +1400,564 @@ console.log(moreVegs);
 
 //example 
 //calling push on nonarray objects.
+const arrayLiked = {
+    length: 3,
+    unrelated: "foo",
+    2: 4,
+};
+// in a following statment we have to add 1 and second value at the 3 and 4th index position
+Array.prototype.push.call(arrayLiked, 1, 2);
+console.log(arrayLiked);
+
+//----------------------Array.Prototype.reduce(callback_function , initial_Value)--------------------
+// reduce(callbackFuntion(accumelater, current_value, current index, array))
+// The reduce() method execute a user supplied reducer callback function on each element of the array
+// in order passing in the return value from the calculation on the preceding elment
+// The final result of running the reducer across all element of the array is a single value
+//reduce() is itarative method  of array.
+// itarate left to right
+
+//example 1
+// return the sum of all the element in the given array
+const arraye = [1, 2, 3, 4]
+const initial_Value = 0;
+const sumwithInitial = arraye.reduce((accumelator, currentValue) => {
+    return accumelator + currentValue
+
+}, initial_Value);
+console.log(sumwithInitial);
+
+// TypeError
+//Thrown if the array contains no element and initial value is not provided.
+
+//example
+// if the inital value is not provided then the reduce method will act differentely for array with
+//length larger then 1 equal to 1 and 0 
+
+const getMax = (a, b) => Math.max(a, b);
+// callback is invoked for each element in the array starting at index 0
+console.log([1, 100].reduce(getMax, 50));
+console.log([50].reduce(getMax, 10));
+
+// callback function is invoked once for at index 1 
+[1, 100].reduce(getMax);
+
+// callback is not invoked 
+console.log([50].reduce(getMax));
+console.log([].reduce(getMax, 1));
+
+//
+// console.log([].reduce(getMax))//typeErro
+
+//example
+// How reduce method work without initial value 
+const fc = [15, 16, 17, 18, 19]
+function reducer(accumelater, currentValue, index) {
+    const returns = accumelater + currentValue;
+    console.log(`accumelator:${accumelater}, currentValue :${currentValue}, index:${index}, returns:${returns}`,);
+    return returns;
+
+}
+// in above example can not send the iniital value to ans is 85 
+// its execution start from the zero index of the array like 
+fc.reduce(reducer);
+
+//example 
+//How to work reduce method with an initial value .
+console.log([15, 16, 17, 18, 19].reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    10,
+));
+// here execution start from initial value like 10;
+// so above example return 95
+
+// example 
+// sum of value in object variable
+const objectsx = [{ x: 1 }, { x: 2 }, { x: 3 }];
+const addition = objectsx.reduce((accumulator, currentValue) => accumulator + currentValue.x, 0,);
+console.log(addition);
+
+//example
+// using reduce with spare array 
+// reduce skips missing element in the spare array but it does not skip undefined value
+console.log([1, 2, 3, , 5].reduce((a, b) => a + b));
+console.log([1, 2, undefined, 4].reduce((a, b) => a + b))
+
+//--------------------------Array.prototype.reduceRight()-------------------
+//the reduceRight() method applies a function against an accumulator and each value of the array
+//(from left-to - right ) to reduce it to a single value.
+// reduceRight(callback_function, initial_value)
+// return that result from the reduction
+// reduceRight() method it is iterative method it run reducer callback function over all element in the array in
+// decendiong index order and accumulate into a single value.
+const array_11 = [
+    [0, 1],
+    [2, 3],
+    [4, 5],
+];
+const resulttt = array_11.reduceRight((acumilator, cuurentvalue) => {
+    console.log('hi', acumilator);
+    console.log('by', cuurentvalue);
+    return acumilator.concat(cuurentvalue)
+});
+console.log(resulttt);
+
+// how to reduceRight method work without an initail value
+console.log(`result `, [0, 1, 2, 3, 4].reduceRight((accur, cv, index, array) => {
+    //here initial value are not given the start form oth index .
+    return accur + cv
+}));
+
+// how to reducRight method work with initial value 
+console.log([0, 1, 2, 3, 4].reduceRight(
+    // here we have to provide the initial value so its start from 10 
+    (accumulator, currentValue, index, array) => accumulator + currentValue,
+    10,
+));
 
 
+//example:
+// using reduceRight() with spare array
+// reduceRight() skip missing element in spare array but it does not skip undifiend value
+console.log([1, 2, , 4].reduceRight((a, b) => a + b)); // 7
+console.log([1, 2, undefined, 4].reduceRight((a, b) => a + b)); // NaN
+
+//-----------------Array.prototyp.reverse()------------------------
+// reverse()
+// the reverse() method reverse a array in place and return refrences to the same array.
+//the first array element now becoming the last and last arrayElement becoming the first
+// reverse() method return refrences to the origonal array now reserved note that the array reversed in place
+//and no copy made.
+// in reverse method origional array changed
+
+// To reverse the elment in an array without mutating   the origional array use toReserved();
+//example
+const array_123 = ['one', 'two', 'three'];
+console.log(array_123);
+const reverse = array_123.reverse();
+console.log(reverse);
+// after reversing the array element origional array will be change but preseved same refrences.
+console.log(array_123);
+
+// example 2
+// the reverse method return the refrences to the same array. (i,e return the refrences to the origional array)
+// also mutating the return array as well as origonal array.
+const digit = [1, 2, 3, 4, 5, 4];
+const rev = digit.reverse();
+console.log(rev);
+console.log(digit);
+rev[5] = 1;
+// here both reverse and origional crete the same refrences (i.e it return shallow copy)
+console.log(digit[5]);
+
+//example 3
+// using revers in spares array
+// spare array remains spare after calling reverse()
+// empty slot copid over to their respective new indices as empty slot
+console.log([1, 2, , 3].reverse());
+console.log([2, 3, 4, ,].reverse());
+
+//------------------Array.prototype.shift()------------------------
+//shift()
+// Shift() method remove the first element from an  array and return that removed elment
+//This method change the length of an array.
+//  return removed element from an array
+//  undefined if the array is empty.
+//  shifr() method are mutating method (i.e chage the length of the array )
+
+const arrayg = [1, 3, 4, 6, 67, 9];
+const firstRemove = arrayg.shift();
+console.log(firstRemove); // return the removed element from an array
+console.log(arrayg); // Here origional array length will be change (i.e origional array will be modified)
+
+//  example 
+//  using shift() method in while loop
+//  the shift method often used in condition inside while loop in the following example every iteration
+// will be remove the next element from an array.until it is empty.
+const namesl = ["Andrew", "Tyrone", "Paul", "Maria", "Gayatri"];
+while (typeof (i = namesl.shift()) !== 'undefined') {
+    console.log(i);
+}// in this exampl remove the element line by line and disyplay all emement as removed element.
+
+// example
+// calling a shift method on non-arrayobject
+const arrayLikev = {
+    length: 3,
+    unrelated: "foo",
+    2: 4,
+};
+// return remove an element
+console.log(Array.prototype.shift.call(arrayLikev));
+// undefined, because it is an empty slot
+console.log(arrayLikev);
+// { '1': 4, length: 2, unrelated: 'foo' } // return actual array
+
+const plainObj = {};
+// There's no length property, so the length is 0
+Array.prototype.shift.call(plainObj);
+console.log(plainObj);
+// { length: 0 }
 
 
+// --------------Array.prototype.slice(start, end)-----------------
+// slice() method return the shallow copy of a portion of an array into new array objects
+// selected from start to end
+// so wehere start and end represnet the index of the item in the array
+// The origional array not modified
+// copying method
 
+// example 
+const newAnimals = ['ant', 'bison', 'camel', 'duck', 'elemphant'];
+console.log(newAnimals.slice(2)); //[ 'camel', 'duck', 'elemphant' ]
+// following example indexign start from index 2 to index 4 but still it print up last index -1
+console.log(newAnimals.slice(2, 4)) //  [ 'camel', 'duck' ]
+console.log(newAnimals.slice(1, 5));// [ 'bison', 'camel', 'duck', 'elemphant' ]
+// its start from -2 to up to end
+console.log(newAnimals.slice(-2)) //[ 'duck', 'elemphant' ]
+console.log(newAnimals.slice(2, -1)); //[ 'camel', 'duck' ]
+const hione = newAnimals.slice();
+console.log(hione) // [ 'ant', 'bison', 'camel', 'duck', 'elemphant' ]
+console.log(newAnimals);//[ 'ant', 'bison', 'camel', 'duck', 'elemphant' ]
+// return false because it create shallow copy (it return poriton of the array into the new array objects)
+console.log(newAnimals === hione); // false
+console.log(newAnimals.slice());
+
+//exmaple 3
+// calling slice() method on non-array objects
+const arrayLikes = {
+    length: 3,
+    0: 2,
+    1: 3,
+    2: 4,
+    3: 33, // ignored by slice() since length is 3
+}; // return only value
+console.log(Array.prototype.slice.call(arrayLikes, 1, 3));
+
+// example 4
+// using splice() on sparse array
+// the array return from slice() may be spares if the source is sparese
+console.log([12, 3, 4, , 6].slice(1, 4));
+
+
+// -----------------Array.prototype.some(callbackFunction, ThisArgs)----------------
+// some()
+// the some() method test weather at least one elment in the array passes the test implemented by the 
+// provided functions 
+// it return true if in the array it find and elment for which the provided function return true 
+// otherwise it return false 
+//  it doesnt modify the origioanl array.
+// true if the callback function return a truthy value for at least one element in the array 
+// oterwise  false.
+// iterative method it call a provided callback function once for each element in an array 
+// until the callback function return the truthy.
+
+// example2 
+const newarr = [1, 2, 3, 4, 5, 6, 7]
+const even = (element) => element % 2 === 0;
+console.log(newarr.some(even)); // true
+
+// example3
+// testing value of array element
+
+function isBiggerThen10(element, index, array) {
+    return element > 10;
+}
+console.log([2, 5, 8, 1, 4].some(isBiggerThen10)); // false
+console.log([12, 5, 8, 1, 4].some(isBiggerThen10)) // true
+
+// Testing array element using  arrow function
+console.log([2, 5, 8, 1, 4].some((x) => x > 10)); // false
+
+//example 4 
+//checking weather a value exits in an array
+const fruitsv = ["apple", "banana", "mango", "guava"];
+function checkavailibity(arr, val) {
+    return arr.some((arrValue) => val === arrValue)
+}
+console.log(checkavailibity(fruitsv, "kela")); // false
+console.log(checkavailibity(fruitsv, 'banana'));// true
+
+// example 5
+// using some() on  sparse array
+// some() will not run its predicate on empty slots.
+console.log([1, , 2].some((x) => x === undefined)); // false
+console.log([1, , 1].some((x) => x !== 1));  // false
+console.log([1, undefined, 1].some((x) => x !== 1)); //true
+
+// -----------Array.prototype.sort() -----------------
+// sort() 
+// sort() method sort the element of an array in place  and return the refrences to the same array now sorted
+// The default sort order is ascending built upon converting the element into string the comparing their sequences 
+// in UTF-16 code units value.
+// return to the refrences to the origional array, now sorted  note that the array is sorted 
+// in place and no copy is made.
+// all the undefined element stored at end of the array
+// sort() method preserve the empty slot if source of array having empty slot are 
+// moved to the end of the array., and its come after undefiend
+
+
+//example1
+const months = ['March', 'Jan', 'Feb', 'Dec'];
+const sort = months.sort();
+console.log(sort);//[ 'Dec', 'Feb', 'Jan', 'March' ]
+console.log(months.sort()); // by default sort in acending order.
+
+// example 2
+// . In a numeric sort, 9 comes before 80, but because numbers are converted to strings,
+//  "80" comes before "9" in the Unicode orde
+const array15 = [1, 30, 4, 21, 100000];
+const sortarray = array15.sort();
+console.log(sortarray);//[ 1, 100000, 21, 30, 4 ]
+
+//example 3
+// creating, displaying, and sorting an array
+const stringArray = ["Blue", "Humpback", "Beluga"];
+const numberArray = [40, 1, 5, 200];
+const numericStringArray = ["80", "9", "700"];
+const mixedNumericArray = ["80", "9", "700", 40, 1, 5, 200];
+
+function compareNumbers(a, b) {
+    return a - b
+}
+
+const new2 = stringArray.join();
+console.log(new2);
+console.log(stringArray.sort())
+
+console.log(numberArray.join());
+console.log(numberArray.sort());
+console.log(numberArray.sort(compareNumbers));
+
+console.log(numericStringArray.join());
+console.log(numericStringArray.sort());
+console.log(numericStringArray.sort(compareNumbers));
+
+console.log(mixedNumericArray.join());
+console.log(mixedNumericArray.sort());
+console.log(mixedNumericArray.sort(compareNumbers));
+
+//example 4
+// sorting array of objects.
+const items3 = [
+    { name: "Edward", value: 21 },
+    { name: "Sharpe", value: 37 },
+    { name: "And", value: 45 },
+    { name: "The", value: -12 },
+    { name: "Magnetic", value: 13 },
+    { name: "Zeros", value: 37 },
+];
+// sort the array
+items3.sort((a, b) => a.value - b.value);
+
+items3.sort((a, b) => {
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
+    if (nameA < nameB) {
+        return -1
+    }
+    if (nameA > nameB) {
+        return -1
+    }
+    return 0;
+})
+
+// example
+//sort() return the refrences  to the same array
+// sort() method return a refrences to the origonal array so mutating the returned array will mutate the 
+// origional array as well 
+const numbersg = [3, 1, 4, 1, 5];
+const sorted = numbersg.sort((a, b) => a - b);
+sorted[0] = 10
+console.log(numbersg[0]);
+
+//example 
+//using sort() on spare arrays
+console.log(['a', 'c', , 'b'].sort()); // ['a', 'b', 'c', empty]
+
+//--------------Array.prototype.splice(start, deletCount, item0,item1)-------------------
+// splic()
+// The splic() method change the content of an array by removing, or replacing existing element and/or
+// adding new elements 
+// a create new array with a segment removed  or replaced with mutating the origonal array  to usedSplilced()
+// to acess part of an array without modifying it use splice()
+// if only one elemenet is removed an array of one element is returned
+// if no elment are removed , AN empty array return 
+// mutating method 
+
+// example
+const months1 = ['Jan', 'March', 'April', 'June'];
+// this used to add element
+// also splic metho return deleted array element with array.
+const outputt = months1.splice(1, 0, 'Feb');
+console.log(outputt);
+console.log(months1);
+
+months1.splice(4, 1, 'May');
+console.log(months1);
+
+// example 
+// using splic() on sparese array
+const arrv = [1, , 3, 4, , 6];
+console.log(arrv.splice(1, 2)); //[ < 1 empty item >, 3]
+//[1, 4, < 1 empty item >, 6 ]
+console.log(arrv);
+
+//-------------Array.prototype.toLocalString(locals,options) -----------------
+// The toLocalString() method return a string represneting the element of the array .
+// the element are converted to string using their toLocalString method and this string are separated by a local-specific
+// string.
+// it return the string representation of the array.
+const array1222 = [1, 'a', new Date('21 Dec 1997 14:12:00 UTC')];
+const tolocalstring = array1222.toLocaleString('en', { timeZone: 'UTC' });
+console.log(tolocalstring); //1,a,12/21/1997, 2:12:00 PM
+
+// object of configuration property for numbers
+// Number.prototype.toLocaleString();
+// Date.prototype.toLocaleDateString();
+
+// if an element is undefined , null it is converted to  an empty string instead of strig null or undefined 
+
+// using local and option 
+// the element of the array are converted to string using there toString method.
+// object : Object.prototype.toLocalString
+//Number : Number.prototype.toLocalString
+// Date : Date.prototype.toLocalString.
+
+// using toLocalString() on non-array objects
+console.log([1, , 3].toLocaleString());
+
+// ----------------------Array.prototype.toReversed()-----------------
+// toReversed method of the array instances is the copying counter part of the reverse() method 
+// it return new array with the element in reversed order.
+// A new array containing the element in reversed order
+// (toReversed ) method transpose the element of the calling array objects in the reverse order 
+// and return new array 
+
+// example 
+// const itemsd = [1, 2, 3];
+// console.log(items); // [1, 2, 3]
+
+// const reversedItems = itemsd.toReversed();
+// console.log(reversedItems); // [3, 2, 1]
+// console.log(items); // [1, 2, 3]
+
+
+// // example
+//calling toReversed () on sparese array
+// the return value of toreversed() is never spare empty slot become undefined in the return array. 
+// console.log([1, , 3].toReversed()); // [3, undefined, 1]
+// console.log([1, , 3, 4].toReversed()); // [4, 3, undefined, 1]
+
+
+// -----------------Array.prototype.toSorted(compareFunction) -------------
+// the to sorted method of  the array instances is the copying   version of the sort() method
+// it return new array with the elments stored in  acending order.
+// it return new array with the element  sorted in acending order.
+// const monthss = ["Mar", "Jan", "Feb", "Dec"];
+// const sortedMonth = monthss.toSorted();
+// console.log(sortedMonth);
+// //example
+// // toSorted method on non spare method 
+// console.log(["a", "c", , "b"].toSorted()); // ['a', 'b', 'c', undefined]
+// console.log([, undefined, "a", "b"].toSorted()); 
+
+// -------------------------Array.prototype.toSpliced(start, delete_count, item1, item2)-------------------------------------
+// The toSpliced() method of Array instances is the copying version of the splice() method.
+//  It returns a new array with some elements removed and/or replaced at a given index.
+// A new array that consists of all elements before start, item1, item2, …, itemN, 
+// and all elements after start + deleteCount.
+
+
+//------------------ Array.prototyp.toString()----------------------------
+// toString() method return the string representation of specified array and its element.
+// A string representation the element of the array
+// so array object override the toString() method of the object 
+//toString() method internall call join() method  which join the array and return one string containing 
+//each array element separated by comman
+// if the join() method not availabe or is not function the Object.prototype.toString() us used instead 
+const array14 = [1, 2, 'a', '1a'];
+const hey = array14.toString()
+console.log(hey);
+
+// example
+const arrvv = [];
+arrvv.join = 1;
+// console.log(arrvv.toString()); [object Array]
+
+//example 1
+const arry = [];
+arry.push(1, [3, arry, 4], 2);
+console.log(arry.toString()); // 1,3,,4,2
+
+// examople 2
+const arry1 = [1, 2, "a", "1a"];
+const newStr = arry1.toString();
+console.log(newStr);
+
+// example 3
+// using toString() on spare array
+console.log([1, , 3].toString()); // '1,,3'
+
+// --------------Array.prototyp.unshift(element1,element2,element..n)------------------
+// The unshift() method add the specified elment to the begging of the array .
+// and return new length property of the object /  the array upon which method called
+// unshift() method insert the given value to the beggining of the array or array-like object
+
+// example
+let arrc = [4, 5, 6];
+
+arrc.unshift(1, 2, 3);
+console.log(arrc);
+// [1, 2, 3, 4, 5, 6]
+
+// -------------------Array.prototype.values()------------------
+// array.prototype.value() is default implementation of Array.prototype.[@@iterator]
+// the value method() return a new array iterator objects that iteratie the value of each item in the array
+// return new iterable iterator objects 
+// example
+// value() return iterable iterator so you can used for of loop
+const arrayd1 = ['a', 'b', 'c'];
+const iteratorx = arrayd1.values();
+for (const value of iteratorx) {
+    console.log(value);
+}
+
+// iteration using next()
+// you have to used next() when return value is also an iterator so you can call next() directely
+const arrmm = ["a", "b", "c", "d", "e"];
+const iteratorm = arrmm.values();
+iterator.next(); // { value: "a", done: false }
+iterator.next(); // { value: "b", done: false }
+iterator.next(); // { value: "c", done: false }
+iterator.next(); // { value: "d", done: false }
+iterator.next(); // { value: "e", done: false }
+iterator.next(); // { value: undefined, done: true }
+console.log(iterator.next().value); // undefined
+
+// value() method used nonSpare array
+// if in array is empty slot then it return undefined 
+for (const element of [, "a"].values()) {
+    console.log(element);
+}
+// undefined
+// 'a'
+
+// -------------Array.prototype.with()---------------------------
+//array.object.with(index, value)
+//the with() method of array instances is the copying version of using the bracket notation to
+// chage the value of the given index.
+// it return the new array with the element at the given index replaced with the given value
+// returnnew array with the elment at index replaced with value.
+
+// exampe
+// creating new array with a single element changed
+
+// const arrr = [1, 2, 3, 4, 5];
+// console.log(arrr.with(2, 6)); // [1, 2, 6, 4, 5]
+// console.log(arrr); // [1, 2, 3, 4, 5]
+
+// with() method on sparse array
+// Note: with method always create dence array 
+// const arrvvv = [1, , 3, 4, , 6];
+// console.log(arrvvv.with(0, 2)); // [2, undefined, 3, 4, undefined, 6]
 
